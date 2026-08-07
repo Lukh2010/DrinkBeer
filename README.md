@@ -24,7 +24,7 @@ chmod +x install.sh
 ```powershell
 git clone https://github.com/Lukh2010/DrinkBeer.git
 cd DrinkBeer
-install.bat
+DrinkBeer.bat
 ```
 
 Both scripts will:
@@ -93,10 +93,8 @@ Then open **http://localhost:3000** in your browser.
 ```
 DrinkBeer/
 ├── README.md                 # Project Documentation
-├── DrinkBeer.desktop         # Linux App Launcher / Shortcut
 ├── DrinkBeer.bat             # Windows App Launcher / Shortcut
 ├── install.sh                # Linux/macOS Installer Script
-├── install.bat               # Windows Installer Script
 └── src/                      # Source Code Subfolder
     ├── server.js             # Express + Socket.io backend
     ├── package.json          # Node dependencies
