@@ -92,19 +92,23 @@ Then open **http://localhost:3000** in your browser.
 
 ```
 DrinkBeer/
-├── server.js                 # Express + Socket.io backend
-├── package.json
-├── install.sh                # Linux/macOS installer
-├── install.bat               # Windows installer
-└── public/
-    ├── host/                 # PC big-screen display
-    │   ├── index.html
-    │   ├── style.css
-    │   └── app.js
-    └── mobile/               # Phone controller UI
-        ├── index.html
-        ├── style.css
-        └── app.js
+├── README.md                 # Project Documentation
+├── DrinkBeer.desktop         # Linux App Launcher / Shortcut
+├── DrinkBeer.bat             # Windows App Launcher / Shortcut
+├── install.sh                # Linux/macOS Installer Script
+├── install.bat               # Windows Installer Script
+└── src/                      # Source Code Subfolder
+    ├── server.js             # Express + Socket.io backend
+    ├── package.json          # Node dependencies
+    └── public/
+        ├── host/             # PC big-screen display UI
+        │   ├── index.html
+        │   ├── style.css
+        │   └── app.js
+        └── mobile/           # Phone controller UI
+            ├── index.html
+            ├── style.css
+            └── app.js
 ```
 
 ---

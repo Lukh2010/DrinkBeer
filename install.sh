@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$SCRIPT_DIR/src"
+
 # If launched from GUI file manager (no terminal attached), re-launch inside a visible terminal window!
 if [ ! -t 1 ] && [ -z "$DRINK_BEER_IN_TERM" ]; then
     export DRINK_BEER_IN_TERM=1
@@ -8,13 +12,13 @@ if [ ! -t 1 ] && [ -z "$DRINK_BEER_IN_TERM" ]; then
         notify-send "🍺 DRINK BEER!" "Opening game terminal and starting server..." 2>/dev/null || true
     fi
     if command -v x-terminal-emulator &> /dev/null; then
-        exec x-terminal-emulator -e bash -c "cd '$(dirname "$0")' && ./install.sh; exec bash"
+        exec x-terminal-emulator -e bash -c "cd '$SCRIPT_DIR' && ./install.sh; exec bash"
     elif command -v gnome-terminal &> /dev/null; then
-        exec gnome-terminal -- bash -c "cd '$(dirname "$0")' && ./install.sh; exec bash"
+        exec gnome-terminal -- bash -c "cd '$SCRIPT_DIR' && ./install.sh; exec bash"
     elif command -v konsole &> /dev/null; then
-        exec konsole -e bash -c "cd '$(dirname "$0")' && ./install.sh; exec bash"
+        exec konsole -e bash -c "cd '$SCRIPT_DIR' && ./install.sh; exec bash"
     elif command -v xterm &> /dev/null; then
-        exec xterm -e bash -c "cd '$(dirname "$0")' && ./install.sh; exec bash"
+        exec xterm -e bash -c "cd '$SCRIPT_DIR' && ./install.sh; exec bash"
     fi
 fi
 
@@ -59,6 +63,9 @@ NPM_VER=$(npm -v)
 echo "✅ Node.js: $NODE_VER"
 echo "✅ npm:     $NPM_VER"
 echo ""
+
+# Move into src directory
+cd "$SRC_DIR"
 
 # Install npm dependencies if node_modules missing or needed
 echo "📦 Checking and installing dependencies..."
