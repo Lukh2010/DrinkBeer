@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "test-local": "node server.js --local",
     "dev": "node server.js"
   },
   "keywords": [

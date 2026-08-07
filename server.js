@@ -10,8 +10,10 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const PORT = process.env.PORT || 3000;
-const localIP = '127.0.0.1';
-const connectUrl = `http://localhost:${PORT}/play`;
+const isTestMode = process.env.TEST_MODE === 'true' || process.argv.includes('--local');
+const localIP = isTestMode ? '127.0.0.1' : ip.address();
+const listenHost = isTestMode ? '127.0.0.1' : '0.0.0.0';
+const connectUrl = `http://${localIP}:${PORT}/play`;
 
 let cachedQrDataUrl = '';
 qrcode.toDataURL(connectUrl, {
@@ -607,10 +609,16 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(PORT, '127.0.0.1', () => {
+server.listen(PORT, listenHost, () => {
   console.log(`====================================================`);
-  console.log(`🍻 DRINK BEER PARTY PC APP (LOCALHOST TEST MODE)`);
-  console.log(`🖥️ Host Display: http://localhost:${PORT}`);
-  console.log(`📱 Test Player:  http://localhost:${PORT}/play`);
+  if (isTestMode) {
+    console.log(`🍻 DRINK BEER PARTY PC APP (LOCALHOST TEST MODE)`);
+    console.log(`🖥️ Host Display: http://localhost:${PORT}`);
+    console.log(`📱 Test Player:  http://localhost:${PORT}/play`);
+  } else {
+    console.log(`🍻 DRINK BEER PARTY PC APP (WLAN PARTY MODE)`);
+    console.log(`🖥️ Host PC Display: http://localhost:${PORT}`);
+    console.log(`📱 Mobile QR Connect (Wi-Fi): ${connectUrl}`);
+  }
   console.log(`====================================================`);
 });
