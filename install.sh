@@ -3,50 +3,73 @@ set -e
 
 echo ""
 echo "======================================================"
-echo "  🍺 DRINK BEER! — Party Game Installer (Linux/macOS)"
+echo "  🍺 DRINK BEER! — Automatic Party Installer (Linux/macOS)"
 echo "======================================================"
 echo ""
 
-# Check for Node.js
-if ! command -v node &> /dev/null; then
-    echo "❌ Node.js is not installed!"
+# Helper to check command existence
+has_cmd() {
+    command -v "$1" &> /dev/null
+}
+
+# Auto-install Node.js & npm if missing
+if ! has_cmd node || ! has_cmd npm; then
+    echo "⚠️ Node.js / npm not found! Attempting automatic installation..."
     echo ""
-    echo "Install it first:"
-    echo "  Ubuntu/Debian:  sudo apt install nodejs npm"
-    echo "  Fedora:         sudo dnf install nodejs npm"
-    echo "  Arch:           sudo pacman -S nodejs npm"
-    echo "  macOS:          brew install node"
-    echo "  Or download:    https://nodejs.org/"
+    if has_cmd apt-get; then
+        echo "⚡ Detected Debian/Ubuntu (apt). Installing nodejs & npm..."
+        sudo apt-get update && sudo apt-get install -y nodejs npm
+    elif has_cmd dnf; then
+        echo "⚡ Detected Fedora/RHEL (dnf). Installing nodejs & npm..."
+        sudo dnf install -y nodejs npm
+    elif has_cmd pacman; then
+        echo "⚡ Detected Arch Linux (pacman). Installing nodejs & npm..."
+        sudo pacman -Sy --noconfirm nodejs npm
+    elif has_cmd brew; then
+        echo "⚡ Detected macOS (Homebrew). Installing node..."
+        brew install node
+    else
+        echo "❌ Could not auto-detect package manager."
+        echo "Please install Node.js manually from https://nodejs.org/"
+        exit 1
+    fi
     echo ""
-    exit 1
 fi
 
 NODE_VER=$(node -v)
-echo "✅ Node.js found: $NODE_VER"
-
-# Check for npm
-if ! command -v npm &> /dev/null; then
-    echo "❌ npm is not installed! Install it alongside Node.js."
-    exit 1
-fi
-
-echo "✅ npm found: $(npm -v)"
+NPM_VER=$(npm -v)
+echo "✅ Node.js: $NODE_VER"
+echo "✅ npm:     $NPM_VER"
 echo ""
 
-# Install dependencies
-echo "📦 Installing dependencies..."
+# Install npm dependencies if node_modules missing or needed
+echo "📦 Checking and installing dependencies..."
 npm install
 echo ""
 
-# Done — start the server
 echo "======================================================"
-echo "  ✅ Installation complete!"
+echo "  🚀 Starting DRINK BEER Party Game!"
 echo "======================================================"
 echo ""
-echo "Starting the game server..."
+echo "🖥️ Host Display:  http://localhost:3000"
+echo "📱 Player Link:   http://localhost:3000/play"
+echo ""
+echo "Opening browser tabs automatically in 2 seconds..."
 echo ""
 
-# Open browser after a short delay
-(sleep 2 && xdg-open "http://localhost:3000" 2>/dev/null || open "http://localhost:3000" 2>/dev/null) &
+# Auto-open browser tabs for host display and test player
+(
+    sleep 2
+    if has_cmd xdg-open; then
+        xdg-open "http://localhost:3000" 2>/dev/null || true
+        sleep 1
+        xdg-open "http://localhost:3000/play" 2>/dev/null || true
+    elif has_cmd open; then
+        open "http://localhost:3000" 2>/dev/null || true
+        sleep 1
+        open "http://localhost:3000/play" 2>/dev/null || true
+    fi
+) &
 
+# Start the game server
 npm start

@@ -617,8 +617,9 @@ server.listen(PORT, listenHost, () => {
     console.log(`📱 Test Player:  http://localhost:${PORT}/play`);
   } else {
     console.log(`🍻 DRINK BEER PARTY PC APP (WLAN PARTY MODE)`);
-    console.log(`🖥️ Host PC Display: http://localhost:${PORT}`);
+    console.log(`🖥️ Host PC Display:           http://localhost:${PORT}`);
     console.log(`📱 Mobile QR Connect (Wi-Fi): ${connectUrl}`);
+    console.log(`💻 Local Test Player Link:    http://localhost:${PORT}/play`);
   }
   console.log(`====================================================`);
 });
