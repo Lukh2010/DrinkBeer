@@ -304,16 +304,33 @@ function switchStage(stageName) {
   }
 }
 
+// FETCH INITIAL INFO (QR CODE & URL) ON LOAD
+fetch('/api/info')
+  .then(res => res.json())
+  .then(info => {
+    if (info.url && document.getElementById('lobby-url-display')) {
+      document.getElementById('lobby-url-display').textContent = info.url;
+    }
+    if (info.ip && document.getElementById('nav-ip-url')) {
+      document.getElementById('nav-ip-url').textContent = `${info.ip}:${info.port}`;
+    }
+    if (info.qr && document.getElementById('qr-code-img')) {
+      document.getElementById('qr-code-img').src = info.qr;
+    }
+  })
+  .catch(err => console.error('Error fetching server info:', err));
+
 // SOCKET SYNC LISTENER
 socket.on('state:sync', (data) => {
   localState = { ...localState, ...data };
   
-  if (data.ip && data.url) {
-    document.getElementById('nav-ip-url').textContent = `${data.ip}:${data.port}`;
+  if (data.url && document.getElementById('lobby-url-display')) {
     document.getElementById('lobby-url-display').textContent = data.url;
   }
-
-  if (data.qr) {
+  if (data.ip && document.getElementById('nav-ip-url')) {
+    document.getElementById('nav-ip-url').textContent = `${data.ip}:${data.port}`;
+  }
+  if (data.qr && document.getElementById('qr-code-img')) {
     document.getElementById('qr-code-img').src = data.qr;
   }
 
@@ -729,4 +746,24 @@ document.getElementById('btn-admin-reset').addEventListener('click', () => {
   if (!confirm('Reset the entire game? All progress will be lost!')) return;
   playSound('click');
   socket.emit('admin:reset_game');
+});
+
+// ADMIN: Close App / Shutdown Server
+const btnShutdown = document.getElementById('btn-admin-shutdown');
+if (btnShutdown) {
+  btnShutdown.addEventListener('click', () => {
+    if (!confirm('Close all processes and shut down the server?')) return;
+    playSound('click');
+    socket.emit('admin:shutdown');
+  });
+}
+
+socket.on('server:shutdown', ({ message }) => {
+  document.body.innerHTML = `
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; text-align:center; color:#ef4444; font-family:'Outfit',sans-serif; background:#090d16; padding:32px;">
+      <div style="font-size:72px; margin-bottom:16px;">🛑</div>
+      <h1 style="font-size:40px; font-weight:900; margin-bottom:12px;">Server Process Closed</h1>
+      <p style="font-size:18px; color:#94a3b8; max-width:500px;">${message || 'The host admin closed the application server.'}</p>
+    </div>
+  `;
 });

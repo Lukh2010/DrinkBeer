@@ -13,6 +13,15 @@ const PORT = process.env.PORT || 3000;
 const localIP = '127.0.0.1';
 const connectUrl = `http://localhost:${PORT}/play`;
 
+let cachedQrDataUrl = '';
+qrcode.toDataURL(connectUrl, {
+  width: 320,
+  margin: 2,
+  color: { dark: '#ffffff', light: '#0f172a' }
+}).then(url => {
+  cachedQrDataUrl = url;
+}).catch(err => console.error('QR code generation error:', err));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
@@ -45,7 +54,6 @@ app.get('/api/info', async (req, res) => {
       ip: localIP,
       port: PORT,
       url: connectUrl,
-      localhostUrl: localhostUrl,
       qr: qrDataUrl
     });
   } catch (err) {
@@ -179,8 +187,10 @@ io.on('connection', (socket) => {
   socket.emit('state:sync', {
     ...gameState,
     availableInventory: getAvailableInventory(),
-    connectUrl,
-    ip: localIP
+    url: connectUrl,
+    qr: cachedQrDataUrl,
+    ip: localIP,
+    port: PORT
   });
 
   // HOST: Initialize Drink Inventory
@@ -576,6 +586,15 @@ io.on('connection', (socket) => {
       ...gameState,
       availableInventory: getAvailableInventory()
     });
+  });
+
+  // ADMIN: Shutdown Server Process
+  socket.on('admin:shutdown', () => {
+    console.log('🛑 ADMIN: Shutdown server process command received. Closing...');
+    io.emit('server:shutdown', { message: 'Server process closed by host admin.' });
+    setTimeout(() => {
+      process.exit(0);
+    }, 500);
   });
 
   // Disconnect Handling
