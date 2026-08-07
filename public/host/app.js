@@ -321,7 +321,11 @@ socket.on('state:sync', (data) => {
   renderLiveStock();
   renderAdminPanel();
 
-  if (data.phase === 'LOBBY') {
+  if (data.phase === 'SETUP') {
+    switchStage('SETUP');
+    addedDrinks = [];
+    renderSetupInventory();
+  } else if (data.phase === 'LOBBY') {
     switchStage('LOBBY');
   } else if (data.phase === 'ROUND_ACTIVE') {
     switchStage('ROUND');
@@ -695,4 +699,34 @@ document.getElementById('btn-admin-add-drink').addEventListener('click', () => {
 document.getElementById('btn-admin-skip-round').addEventListener('click', () => {
   playSound('click');
   socket.emit('game:next_round');
+});
+
+// ADMIN: Force Wheel Spin — picks a random player and triggers spin
+document.getElementById('btn-admin-force-spin').addEventListener('click', () => {
+  playSound('click');
+  const playerKeys = Object.keys(localState.players);
+  if (playerKeys.length === 0) {
+    alert('No players connected!');
+    return;
+  }
+  const randomPlayer = playerKeys[Math.floor(Math.random() * playerKeys.length)];
+  // Switch to result view with that player as loser, then spin
+  localState.activeLosers = [localState.players[randomPlayer]];
+  document.getElementById('result-summary').textContent = `Admin forced a wheel spin!`;
+  document.getElementById('loser-name').textContent = localState.players[randomPlayer].name;
+  document.getElementById('loser-avatar').textContent = localState.players[randomPlayer].avatar || '🎯';
+  localState.availableInventory = (localState.inventory || []).filter(i => i.count > 0);
+  switchStage('RESULT');
+  drawWheel();
+  // Auto-spin after a brief moment
+  setTimeout(() => {
+    socket.emit('wheel:spin', { targetPlayerId: randomPlayer });
+  }, 500);
+});
+
+// ADMIN: Reset Game — go back to setup
+document.getElementById('btn-admin-reset').addEventListener('click', () => {
+  if (!confirm('Reset the entire game? All progress will be lost!')) return;
+  playSound('click');
+  socket.emit('admin:reset_game');
 });

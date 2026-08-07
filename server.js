@@ -561,6 +561,23 @@ io.on('connection', (socket) => {
     }
   });
 
+  // ADMIN: Reset Game — wipe everything back to SETUP
+  socket.on('admin:reset_game', () => {
+    console.log('ADMIN: Game reset triggered!');
+    gameState.phase = 'SETUP';
+    gameState.inventory = [];
+    gameState.players = {};
+    gameState.roundNumber = 0;
+    gameState.currentRound = null;
+    gameState.activeLosers = [];
+    gameState.lastSpinResult = null;
+    gameState.history = [];
+    io.emit('state:sync', {
+      ...gameState,
+      availableInventory: getAvailableInventory()
+    });
+  });
+
   // Disconnect Handling
   socket.on('disconnect', () => {
     if (gameState.players[socket.id]) {
