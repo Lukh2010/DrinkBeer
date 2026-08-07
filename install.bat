@@ -1,5 +1,8 @@
 @echo off
+title 🍺 DRINK BEER! Party Game Server
+color 0A
 setlocal enabledelayedexpansion
+
 echo.
 echo ======================================================
 echo   🍺 DRINK BEER! — Automatic Party Installer (Windows)
@@ -43,7 +46,7 @@ echo ✅ Node.js: %NODE_VER%
 echo.
 
 :: Install dependencies
-echo 📦 Installing dependencies...
+echo 📦 Checking and installing dependencies...
 call npm install
 echo.
 
@@ -54,7 +57,7 @@ echo.
 echo 🖥️ Host Display:  http://localhost:3000
 echo 📱 Player Link:   http://localhost:3000/play
 echo.
-echo Opening browser tabs automatically...
+echo Opening browser tabs automatically in 2 seconds...
 echo.
 
 :: Open Host Display and Player tabs in default browser
@@ -64,3 +67,5 @@ start "" "http://localhost:3000/play"
 
 :: Start server
 call npm start
+
+pause

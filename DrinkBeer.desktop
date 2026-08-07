@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=DRINK BEER! Party Game
+Comment=Local party drinking game for PC with phone controllers
+Exec=bash -c "cd '$(dirname %k)' && ./install.sh; exec bash"
+Icon=utilities-terminal
+Terminal=true
+Categories=Game;Entertainment;

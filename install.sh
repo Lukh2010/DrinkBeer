@@ -1,6 +1,23 @@
 #!/usr/bin/env bash
 set -e
 
+# If launched from GUI file manager (no terminal attached), re-launch inside a visible terminal window!
+if [ ! -t 1 ] && [ -z "$DRINK_BEER_IN_TERM" ]; then
+    export DRINK_BEER_IN_TERM=1
+    if command -v notify-send &> /dev/null; then
+        notify-send "🍺 DRINK BEER!" "Opening game terminal and starting server..." 2>/dev/null || true
+    fi
+    if command -v x-terminal-emulator &> /dev/null; then
+        exec x-terminal-emulator -e bash -c "cd '$(dirname "$0")' && ./install.sh; exec bash"
+    elif command -v gnome-terminal &> /dev/null; then
+        exec gnome-terminal -- bash -c "cd '$(dirname "$0")' && ./install.sh; exec bash"
+    elif command -v konsole &> /dev/null; then
+        exec konsole -e bash -c "cd '$(dirname "$0")' && ./install.sh; exec bash"
+    elif command -v xterm &> /dev/null; then
+        exec xterm -e bash -c "cd '$(dirname "$0")' && ./install.sh; exec bash"
+    fi
+fi
+
 echo ""
 echo "======================================================"
 echo "  🍺 DRINK BEER! — Automatic Party Installer (Linux/macOS)"
@@ -31,6 +48,7 @@ if ! has_cmd node || ! has_cmd npm; then
     else
         echo "❌ Could not auto-detect package manager."
         echo "Please install Node.js manually from https://nodejs.org/"
+        read -p "Press Enter to exit..."
         exit 1
     fi
     echo ""
