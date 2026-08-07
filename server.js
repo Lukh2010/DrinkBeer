@@ -2,16 +2,29 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const qrcode = require('qrcode');
-const ip = require('ip');
+const os = require('os');
 const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Helper: Get local IPv4 address natively without external dependencies
+function getLocalIpAddress() {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return '127.0.0.1';
+}
+
 const PORT = process.env.PORT || 3000;
 const isTestMode = process.env.TEST_MODE === 'true' || process.argv.includes('--local');
-const localIP = isTestMode ? '127.0.0.1' : ip.address();
+const localIP = isTestMode ? '127.0.0.1' : getLocalIpAddress();
 const listenHost = isTestMode ? '127.0.0.1' : '0.0.0.0';
 const connectUrl = `http://${localIP}:${PORT}/play`;
 
