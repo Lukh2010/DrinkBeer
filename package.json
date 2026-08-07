@@ -1,0 +1,25 @@
+{
+  "name": "drink-beer-party-pc",
+  "version": "1.0.0",
+  "description": "Local PC party drinking game with phone controllers, dynamic wheel penalties, inventory tracking, and admin panel.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "drinking-game",
+    "party-game",
+    "jackbox-style",
+    "socketio",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "ip": "^2.0.1",
+    "qrcode": "^1.5.3",
+    "socket.io": "^4.7.5"
+  }
+}

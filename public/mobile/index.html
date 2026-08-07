@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🎮 Drink Controller</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/mobile/style.css">
+</head>
+<body>
+  <div id="mobile-app">
+    <!-- SCREEN 1: JOIN ROOM -->
+    <div id="screen-join" class="screen active">
+      <div class="join-header">
+        <div class="icon-hero">🍺</div>
+        <h1>DRINK <span class="highlight">BEER!</span></h1>
+        <p>Enter your party name & pick your avatar:</p>
+      </div>
+
+      <form id="form-join" class="join-form">
+        <input type="text" id="input-name" placeholder="Your Name (e.g. Alex)" maxlength="14" required autocomplete="off">
+        
+        <label class="section-label">Choose Avatar:</label>
+        <div id="avatar-picker" class="avatar-picker">
+          <button type="button" class="avatar-opt selected" data-avatar="😎">😎</button>
+          <button type="button" class="avatar-opt" data-avatar="🥳">🥳</button>
+          <button type="button" class="avatar-opt" data-avatar="🤠">🤠</button>
+          <button type="button" class="avatar-opt" data-avatar="🦄">🦄</button>
+          <button type="button" class="avatar-opt" data-avatar="🥷">🥷</button>
+          <button type="button" class="avatar-opt" data-avatar="👾">👾</button>
+          <button type="button" class="avatar-opt" data-avatar="🍻">🍻</button>
+          <button type="button" class="avatar-opt" data-avatar="🔥">🔥</button>
+        </div>
+
+        <button type="submit" class="btn-join">🚀 JOIN GAME</button>
+      </form>
+    </div>
+
+    <!-- SCREEN 2: WAITING LOBBY -->
+    <div id="screen-waiting" class="screen">
+      <div class="waiting-card">
+        <div id="player-avatar-badge" class="player-avatar-badge">😎</div>
+        <h2 id="player-name-display">Alex</h2>
+        <div class="status-pill">✓ CONNECTED TO PC</div>
+        <p class="wait-msg">Look up at the PC screen! Game will start soon...</p>
+        <div class="sip-counter-card">
+          <span class="sip-title">Total Sips Taken:</span>
+          <span id="player-sip-count" class="sip-num">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: CARD PROMPT VOTING (MOST LIKELY / TRIVIA) -->
+    <div id="screen-voting" class="screen">
+      <div class="voting-header">
+        <span class="prompt-badge" id="ctrl-prompt-badge">MOST LIKELY TO</span>
+        <h3 id="ctrl-prompt-title">Who is most likely to...</h3>
+      </div>
+      <div id="voting-options-container" class="voting-options-grid">
+        <!-- Dynamically rendered voting choices -->
+      </div>
+      <div id="voted-confirmation" class="voted-confirmation hidden">
+        <div class="check-icon">✓</div>
+        <h3>Vote Locked In!</h3>
+        <p>Watch the PC screen for results!</p>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: SPEED BUZZER -->
+    <div id="screen-buzzer" class="screen">
+      <div id="buzzer-status" class="buzzer-status">WAIT FOR GREEN...</div>
+      <button id="btn-speed-buzzer" class="btn-buzzer-pad" disabled>
+        <span>TAP HERE!</span>
+      </button>
+    </div>
+
+    <!-- SCREEN 5: TUG-OF-WAR BUTTON MASH -->
+    <div id="screen-mash" class="screen">
+      <h2>🍻 BUTTON MASH DUEL!</h2>
+      <p>Mash as fast as humanly possible!</p>
+      <button id="btn-mash-pad" class="btn-mash-pad">
+        <span>🔥 TAP TAP TAP!</span>
+        <span id="mash-count-badge" class="count-badge">0</span>
+      </button>
+    </div>
+
+    <!-- SCREEN 6: BOMB PASS -->
+    <div id="screen-bomb" class="screen">
+      <div class="bomb-card">
+        <div class="bomb-icon">💣</div>
+        <h2 id="bomb-status-title">YOU HAVE THE BOMB!</h2>
+        <p>Pass it quickly to someone else!</p>
+        <div id="bomb-pass-players" class="bomb-players-grid">
+          <!-- Pass buttons -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/mobile/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍻 DRINK BEER! Party Box PC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/host/style.css">
+</head>
+<body>
+  <div id="app" class="theme-dark">
+    <!-- TOP NAVIGATION BAR -->
+    <header class="top-nav">
+      <div class="logo">
+        <span class="beer-icon">🍺</span>
+        <span class="logo-text">DRINK <span class="highlight">BEER!</span></span>
+      </div>
+      <div id="nav-info" class="nav-info">
+        <div class="connection-badge">
+          <span class="wifi-dot"></span>
+          <span id="nav-ip-url">Connecting...</span>
+        </div>
+      </div>
+      <div class="nav-controls">
+        <button id="btn-toggle-sound" class="icon-btn" title="Toggle Sound">🔊</button>
+        <button id="btn-admin-toggle" class="btn-admin">⚙️ Admin Panel</button>
+      </div>
+    </header>
+
+    <!-- STAGE 1: DRINK INVENTORY INITIAL SETUP -->
+    <section id="stage-setup" class="stage active">
+      <div class="setup-card glass-panel">
+        <div class="setup-header">
+          <h2>🍹 Set Up Your Party Supplies</h2>
+          <p>Add drinks from the library and set how many you have. Drinks that run out will be removed from the wheel!</p>
+        </div>
+
+        <div id="inventory-setup-list" class="inventory-setup-grid">
+          <!-- Dynamically populated added drinks -->
+          <div id="empty-setup-msg" class="empty-setup-msg">
+            <span class="empty-icon">📦</span>
+            <p>No drinks added yet. Tap the <strong>+</strong> button below to pick from the library!</p>
+          </div>
+        </div>
+
+        <div class="setup-actions">
+          <button id="btn-open-library" class="btn-add-circle" title="Add Drink">
+            <span>＋</span>
+          </button>
+          <button id="btn-save-inventory" class="btn-primary-large">🚀 Launch Party Lobby</button>
+        </div>
+      </div>
+
+      <!-- DRINK LIBRARY MODAL -->
+      <div id="drink-library-modal" class="library-modal hidden">
+        <div class="library-modal-content glass-panel">
+          <div class="library-header">
+            <h2>🍺 Drink Library</h2>
+            <button id="btn-close-library" class="close-btn">&times;</button>
+          </div>
+          <div class="library-search-bar">
+            <input type="text" id="library-search" placeholder="🔍  Search drinks..." autocomplete="off">
+          </div>
+          <div class="library-categories">
+            <button class="cat-btn active" data-cat="all">All</button>
+            <button class="cat-btn" data-cat="beer">🍺 Beer</button>
+            <button class="cat-btn" data-cat="spirits">🥃 Spirits</button>
+            <button class="cat-btn" data-cat="wine">🍷 Wine</button>
+            <button class="cat-btn" data-cat="cocktail">🍹 Cocktails</button>
+            <button class="cat-btn" data-cat="soft">💧 Soft / NA</button>
+          </div>
+          <div id="library-grid" class="library-grid">
+            <!-- Populated by JS -->
+          </div>
+          <div class="library-footer">
+            <button id="btn-add-custom-drink" class="btn-secondary">✏️ Create Custom Drink</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 2: PARTY LOBBY (QR CODE + PLAYERS JOIN) -->
+    <section id="stage-lobby" class="stage">
+      <div class="lobby-container">
+        <!-- QR CODE & CONNECT BOX -->
+        <div class="qr-panel glass-panel">
+          <h3>📱 Join on Your Phone</h3>
+          <p>Scan QR code or enter URL in phone browser:</p>
+          <div class="qr-frame">
+            <img id="qr-code-img" src="" alt="QR Code">
+          </div>
+          <div class="url-box">
+            <span id="lobby-url-display">http://...</span>
+          </div>
+          <div class="join-count-badge">
+            <span id="joined-count">0</span> Players Ready
+          </div>
+        </div>
+
+        <!-- PLAYER GRID -->
+        <div class="players-panel glass-panel">
+          <div class="panel-header">
+            <h3>👥 Connected Players</h3>
+            <button id="btn-start-game" class="btn-primary-large glowing">▶ START GAME</button>
+          </div>
+          <div id="players-grid" class="players-grid">
+            <div class="empty-lobby">
+              <div class="pulse-ring">📱</div>
+              <p>Waiting for players to scan QR code & join...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 3: ACTIVE GAME ROUND (CARD PROMPT / MINI-GAME) -->
+    <section id="stage-round" class="stage">
+      <div class="round-layout">
+        <!-- ROUND HEADER / BANNER -->
+        <div class="round-card glass-panel">
+          <div class="round-badge">
+            <span id="round-number-badge">ROUND 1</span>
+            <span id="round-type-badge" class="badge">MOST LIKELY TO</span>
+          </div>
+          <h1 id="round-title" class="round-title">Who is most likely to text their ex?</h1>
+          <p id="round-subtitle" class="round-subtitle">Vote secretly on your phone!</p>
+
+          <!-- MINI GAME ARENA CONTAINER -->
+          <div id="mini-game-arena" class="mini-game-arena hidden">
+            <!-- Dynamic elements: Speed Buzzer countdown, Bomb animation, Tug-of-war bar -->
+          </div>
+
+          <div id="voting-status-bar" class="voting-status-bar">
+            <!-- Status dots of players who voted -->
+          </div>
+
+          <div class="round-actions">
+            <button id="btn-eval-round" class="btn-primary">📊 Reveal Results</button>
+          </div>
+        </div>
+
+        <!-- SIDEBAR: LIVE STOCK & PLAYER SIPS -->
+        <aside class="sidebar-stock glass-panel">
+          <h3>🍺 Remaining Supplies</h3>
+          <div id="live-stock-list" class="stock-list">
+            <!-- Live inventory cards -->
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- STAGE 4: ROUND RESULT & WHEEL SPIN -->
+    <section id="stage-result" class="stage">
+      <div class="result-container glass-panel">
+        <h2 id="result-title">💥 Round Over!</h2>
+        <p id="result-summary" class="result-summary">Alex got the most votes!</p>
+
+        <div class="result-loser-card">
+          <div id="loser-avatar" class="loser-avatar">🤡</div>
+          <h3 id="loser-name">Alex</h3>
+          <p class="penalty-text">Time to face the Wheel of Punishment!</p>
+        </div>
+
+        <!-- WHEEL OF FORTUNE CANVAS -->
+        <div class="wheel-wrapper">
+          <div class="wheel-pointer">🔻</div>
+          <canvas id="wheel-canvas" width="480" height="480"></canvas>
+          <button id="btn-spin-wheel" class="btn-spin">🎯 SPIN WHEEL!</button>
+        </div>
+
+        <!-- SPIN RESULT ANNOUNCEMENT MODAL/CARD -->
+        <div id="spin-result-card" class="spin-result-card hidden">
+          <div id="spin-drink-icon" class="drink-icon-large">🍺</div>
+          <h2 id="spin-result-text">Take 2 Sips of Beer!</h2>
+          <p id="spin-stock-update">14 Beers Remaining</p>
+          <button id="btn-continue-game" class="btn-primary">➡️ Next Round</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN PANEL OVERLAY / DRAWER -->
+    <div id="admin-drawer" class="admin-drawer">
+      <div class="admin-header">
+        <h2>⚙️ Host Admin Control Panel</h2>
+        <button id="btn-close-admin" class="close-btn">&times;</button>
+      </div>
+      <div class="admin-content">
+        <!-- DRINK STOCK ADJUSTER -->
+        <div class="admin-section">
+          <h3>📦 Manage Drink Inventory</h3>
+          <p>Adjust stock quantities live during gameplay. Drinks at 0 are excluded from the wheel.</p>
+          <div id="admin-stock-grid" class="admin-stock-grid">
+            <!-- Dynamic inventory controls -->
+          </div>
+        </div>
+
+        <!-- ADD NEW DRINK -->
+        <div class="admin-section">
+          <h3>➕ Add Custom Drink</h3>
+          <div class="admin-form-row">
+            <input type="text" id="admin-new-name" placeholder="Drink Name (e.g., Tequila)">
+            <input type="number" id="admin-new-count" placeholder="Count" value="10">
+            <input type="text" id="admin-new-unit" placeholder="Unit (Shot/Sip)" value="Shot(s)">
+            <button id="btn-admin-add-drink" class="btn-secondary">Add Drink</button>
+          </div>
+        </div>
+
+        <!-- PLAYER MANAGEMENT -->
+        <div class="admin-section">
+          <h3>👥 Manage Players</h3>
+          <div id="admin-players-list" class="admin-players-list">
+            <!-- Live player list with give sips / kick buttons -->
+          </div>
+        </div>
+
+        <!-- GAME CONTROL ACTIONS -->
+        <div class="admin-section">
+          <h3>🎮 Game Control</h3>
+          <div class="admin-btn-row">
+            <button id="btn-admin-force-spin" class="btn-warning">🌀 Force Wheel Spin</button>
+            <button id="btn-admin-skip-round" class="btn-secondary">⏩ Skip Round</button>
+            <button id="btn-admin-reset" class="btn-danger">🔄 Reset Game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/host/app.js"></script>
+</body>
+</html>
