@@ -12,13 +12,13 @@ if [ ! -t 1 ] && [ -z "$DRINK_BEER_IN_TERM" ]; then
         notify-send "🍺 DRINK BEER!" "Opening game terminal and starting server..." 2>/dev/null || true
     fi
     if command -v x-terminal-emulator &> /dev/null; then
-        exec x-terminal-emulator -e bash -c "cd '$SCRIPT_DIR' && ./install.sh; exec bash"
+        exec x-terminal-emulator -e bash -c "cd '$SCRIPT_DIR' && ./DrinkBeerLinux.sh; exec bash"
     elif command -v gnome-terminal &> /dev/null; then
-        exec gnome-terminal -- bash -c "cd '$SCRIPT_DIR' && ./install.sh; exec bash"
+        exec gnome-terminal -- bash -c "cd '$SCRIPT_DIR' && ./DrinkBeerLinux.sh; exec bash"
     elif command -v konsole &> /dev/null; then
-        exec konsole -e bash -c "cd '$SCRIPT_DIR' && ./install.sh; exec bash"
+        exec konsole -e bash -c "cd '$SCRIPT_DIR' && ./DrinkBeerLinux.sh; exec bash"
     elif command -v xterm &> /dev/null; then
-        exec xterm -e bash -c "cd '$SCRIPT_DIR' && ./install.sh; exec bash"
+        exec xterm -e bash -c "cd '$SCRIPT_DIR' && ./DrinkBeerLinux.sh; exec bash"
     fi
 fi
 

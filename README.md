@@ -15,8 +15,8 @@ A local multiplayer party drinking game for PC with **phone-as-controller** supp
 ```bash
 git clone https://github.com/Lukh2010/DrinkBeer.git
 cd DrinkBeer
-chmod +x install.sh
-./install.sh
+chmod +x DrinkBeerLinux.sh
+./DrinkBeerLinux.sh
 ```
 
 ### Windows
@@ -24,7 +24,7 @@ chmod +x install.sh
 ```powershell
 git clone https://github.com/Lukh2010/DrinkBeer.git
 cd DrinkBeer
-DrinkBeer.bat
+DrinkBeerWindows.bat
 ```
 
 Both scripts will:
@@ -93,8 +93,8 @@ Then open **http://localhost:3000** in your browser.
 ```
 DrinkBeer/
 ├── README.md                 # Project Documentation
-├── DrinkBeer.bat             # Windows App Launcher / Shortcut
-├── install.sh                # Linux/macOS Installer Script
+├── DrinkBeerWindows.bat      # Windows App Launcher & Installer
+├── DrinkBeerLinux.sh         # Linux/macOS App Launcher & Installer
 └── src/                      # Source Code Subfolder
     ├── server.js             # Express + Socket.io backend
     ├── package.json          # Node dependencies
